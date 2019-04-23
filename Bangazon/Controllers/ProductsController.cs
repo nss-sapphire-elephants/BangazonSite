@@ -26,6 +26,28 @@ namespace Bangazon.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
+        public async Task<IActionResult> Types()
+        {
+            var model = new ProductTypesViewModel();
+
+            // Build list of Product instances for display in view
+            // LINQ is awesome
+            model.GroupedProducts = await (
+                from t in _context.ProductType
+                join p in _context.Product
+                on t.ProductTypeId equals p.ProductTypeId
+                group new { t, p } by new { t.ProductTypeId, t.Label } into grouped
+                select new GroupedProducts
+                {
+                    TypeId = grouped.Key.ProductTypeId,
+                    TypeName = grouped.Key.Label,
+                    ProductCount = grouped.Select(x => x.p.ProductId).Count(),
+                    Products = grouped.Select(x => x.p).Take(3).ToList()
+                }).ToListAsync();
+
+            return View(model);
+        }
+
         // GET: Products/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -35,9 +57,9 @@ namespace Bangazon.Controllers
             }
 
             var product = await _context.Product
-                .Include(p => p.ProductType)
-                .Include(p => p.User)
-                .FirstOrDefaultAsync(m => m.ProductId == id);
+               .Include(p => p.ProductType)
+               .Include(p => p.User)
+               .FirstOrDefaultAsync(m => m.ProductId == id);
             if (product == null)
             {
                 return NotFound();

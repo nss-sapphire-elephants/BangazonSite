@@ -1,0 +1,33 @@
+﻿@model Bangazon.Controllers.ProductTypesViewModel
+
+@{
+    ViewData["Title"] = "Types";
+}
+
+<h1>Types</h1>
+
+<div>
+    <h4>Product Types</h4>
+    <hr />
+    <!--Loop through product types -->
+    @foreach (var item in Model.GroupedProducts)
+    {
+        <div class="col-sm-2">
+            @Html.DisplayFor(model => item.TypeName) (@Html.DisplayFor(model => item.ProductCount))
+        </div>
+        <br />
+        <!--Loop through items in category -->
+        @foreach (var product in item.Products)
+        {
+            <a asp-controller="Products" asp-action="Details" asp-route-id="@product.ProductId">
+                @Html.DisplayFor(model => product.Title)
+            </a>
+            <br />
+        }
+        <br />
+    }
+
+    <br />
+
+</div>
+
