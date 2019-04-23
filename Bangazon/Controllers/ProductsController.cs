@@ -42,7 +42,7 @@ namespace Bangazon.Controllers
                     TypeId = grouped.Key.ProductTypeId,
                     TypeName = grouped.Key.Label,
                     ProductCount = grouped.Select(x => x.p.ProductId).Count(),
-                    Products = grouped.Select(x => x.p).Take(3)
+                    Products = grouped.Select(x => x.p).Take(3).ToList()
                 }).ToListAsync();
 
             return View(model);
@@ -158,9 +158,9 @@ namespace Bangazon.Controllers
             }
 
             var product = await _context.Product
-               .Include(p => p.ProductType)
-               .Include(p => p.User)
-               .FirstOrDefaultAsync(m => m.ProductId == id);
+                .Include(p => p.ProductType)
+                .Include(p => p.User)
+                .FirstOrDefaultAsync(m => m.ProductId == id);
             if (product == null)
             {
                 return NotFound();
