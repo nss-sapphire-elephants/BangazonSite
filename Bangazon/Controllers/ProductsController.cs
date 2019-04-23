@@ -71,7 +71,6 @@ namespace Bangazon.Controllers
 			try
 			{
 				ModelState.Remove("User");
-
 				if (ModelState.IsValid)
 				{
 					_context.Add(product);
