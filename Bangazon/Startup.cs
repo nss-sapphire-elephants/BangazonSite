@@ -14,6 +14,8 @@ using Bangazon.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Bangazon.Models;
+using static Microsoft.IdentityModel.Xml.WsTrustConstants_1_3;
+using Microsoft.AspNetCore.Routing;
 
 namespace Bangazon
 {
@@ -72,6 +74,8 @@ namespace Bangazon
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+                    routes.MapRoute("types", "types",
+                    defaults: new { controller = "Products", action = "Types" });
             });
         }
     }
