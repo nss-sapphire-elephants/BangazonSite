@@ -11,5 +11,7 @@
     }
     <li class="nav-item"><a class="nav-link @ManageNavPages.TwoFactorAuthenticationNavClass(ViewContext)" id="two-factor" asp-page="./TwoFactorAuthentication">Two-factor authentication</a></li>
     <li class="nav-item"><a class="nav-link @ManageNavPages.PersonalDataNavClass(ViewContext)" id="personal-data" asp-page="./PersonalData">Personal data</a></li>
+    @*Added a link which routes to the PaymentTypes Controller and calls on the Create method which calls the Create view. 
+        A form pops up to allow the user to add a new payment option.*@
     <li class="nav-item"><a class="nav-link" asp-controller="PaymentTypes" asp-action="Create" Payment Method>Add Payment Method</a></li>
 </ul>
