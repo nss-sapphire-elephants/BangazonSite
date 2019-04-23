@@ -7,26 +7,26 @@
 <h1>Types</h1>
 
 <div>
-    <h4>ProductTypesViewModel</h4>
+    <h4>Product Types</h4>
     <hr />
-    
-
-        @foreach (var item in Model.GroupedProducts)
+    <!--Loop through product types -->
+    @foreach (var item in Model.GroupedProducts)
+    {
+        <div class="col-sm-2">
+            @Html.DisplayFor(model => item.TypeName) (@Html.DisplayFor(model => item.ProductCount))
+        </div>
+        <br />
+        <!--Loop through items in category -->
+        @foreach (var product in item.Products)
         {
-            <div class="col-sm-2">
-                @Html.DisplayFor(model => item.TypeName) (@Html.DisplayFor(model => item.ProductCount))
-            </div>
+            <a asp-controller="Products" asp-action="Details" asp-route-id="@product.ProductId">
+                @Html.DisplayFor(model => product.Title)
+            </a>
             <br />
-            @foreach (var product in item.Products)
-            {
-                <a asp-controller="Products" asp-action="Details" asp-route-id="@product.ProductId">
-                    @Html.DisplayFor(model => product.Title)
-                </a>
-                <br />
-            }
-                <br />
         }
-   
+        <br />
+    }
+
     <br />
 
 </div>
