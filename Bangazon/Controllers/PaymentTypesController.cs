@@ -8,12 +8,15 @@ using Microsoft.EntityFrameworkCore;
 using Bangazon.Data;
 using Bangazon.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Bangazon.Controllers
 {
+    [Authorize]
     public class PaymentTypesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         public PaymentTypesController(ApplicationDbContext ctx,
                           UserManager<ApplicationUser> userManager)
@@ -22,7 +25,6 @@ namespace Bangazon.Controllers
             _context = ctx;
         }
 
-        private readonly UserManager<ApplicationUser> _userManager;
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         // GET: PaymentTypes
@@ -65,12 +67,20 @@ namespace Bangazon.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("PaymentTypeId,DateCreated,Description,AccountNumber,UserId")] PaymentType paymentType)
         {
+            // need to remove the user properties when rendering the views, we want to attach the current user after it is created
+            ModelState.Remove("UserId");
+            ModelState.Remove("User");
+
+            var user = await GetCurrentUserAsync();
+
             if (ModelState.IsValid)
             {
+                paymentType.User = user;
                 _context.Add(paymentType);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", paymentType.UserId);
             return View(paymentType);
         }
