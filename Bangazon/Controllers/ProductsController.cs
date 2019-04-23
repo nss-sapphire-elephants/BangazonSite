@@ -77,7 +77,7 @@ namespace Bangazon.Controllers
 					product.UserId = User.Id;
 					_context.Add(product);
 					await _context.SaveChangesAsync();
-					return RedirectToAction(nameof(Index));
+					return RedirectToAction(nameof(Details));
 				}
 				ViewData["ProductTypeId"] = new SelectList(_context.ProductType, "ProductTypeId", "Label", product.ProductTypeId);
 			}
