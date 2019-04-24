@@ -48,7 +48,7 @@
                        @if (User.Identity.IsAuthenticated)
                        {
                         <li class="nav-item">
-                            <form asp-controller="Products" asp-action="Index">
+                            <form asp-controller="Products" asp-action="SearchResults" method="get">
                                 <input type="text" name="SearchString">
                                     <input type="submit" value="Search Products" />                              
                             </form>
