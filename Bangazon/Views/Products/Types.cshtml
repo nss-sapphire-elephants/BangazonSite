@@ -12,10 +12,10 @@
     <!--Loop through product types -->
     @foreach (var item in Model.GroupedProducts)
     {
-        <div class="col-sm-2">
-            @Html.DisplayFor(model => item.TypeName) (@Html.DisplayFor(model => item.ProductCount))
-        </div>
-        <br />
+    <div class="col-sm-2">
+        <a asp-controller="ProductTypes" asp-action="Details" asp-route-id="@item.TypeId">
+        @Html.DisplayFor(model => item.TypeName)</a> (@Html.DisplayFor(model => item.ProductCount))
+    </div>
         <!--Loop through items in category -->
         @foreach (var product in item.Products)
         {
