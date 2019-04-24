@@ -34,9 +34,10 @@ namespace Bangazon.Controllers
         //search bar get products
         public async Task<IActionResult> SearchResults(string searchString)
         {
-
+            //converts DBset into an IQueryable 
             var products = from p in _context.Product
-                         select p;
+                           select p;
+
 
             if (!String.IsNullOrEmpty(searchString))
             {
