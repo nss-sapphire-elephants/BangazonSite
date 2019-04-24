@@ -16,17 +16,17 @@ namespace Bangazon.Controllers
         private readonly ApplicationDbContext _context;
 		private readonly UserManager<ApplicationUser> _userManager;
 
-		public ProductsController(ApplicationDbContext ctx,
-						  UserManager<ApplicationUser> userManager)
-		{
-			_userManager = userManager;
-			_context = ctx;
-		}
+        public ProductsController(ApplicationDbContext ctx,
+                          UserManager<ApplicationUser> userManager)
+        {
+            _userManager = userManager;
+            _context = ctx;
+        }
+		
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
-		private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
-
-		// GET: Products
-		public async Task<IActionResult> Index()
+        // GET: Products
+        public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Product.Include(p => p.ProductType).Include(p => p.User);
             return View(await applicationDbContext.ToListAsync());
