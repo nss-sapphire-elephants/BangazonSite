@@ -14,6 +14,7 @@ namespace Bangazon.Controllers
     public class ProductsController : Controller
     {
         private readonly ApplicationDbContext _context;
+		private readonly UserManager<ApplicationUser> _userManager;
 
         public ProductsController(ApplicationDbContext ctx,
                           UserManager<ApplicationUser> userManager)
@@ -21,8 +22,7 @@ namespace Bangazon.Controllers
             _userManager = userManager;
             _context = ctx;
         }
-
-        private readonly UserManager<ApplicationUser> _userManager;
+		
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         // GET: Products
@@ -102,16 +102,27 @@ namespace Bangazon.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductId,DateCreated,Description,Title,Price,Quantity,UserId,City,ImagePath,ProductTypeId")] Product product)
+        public async Task<IActionResult> Create(Product product)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(product);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["ProductTypeId"] = new SelectList(_context.ProductType, "ProductTypeId", "Label", product.ProductTypeId);
-            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", product.UserId);
+			try
+			{
+				ModelState.Remove("User");
+				ModelState.Remove("UserId");
+				if (ModelState.IsValid)
+				{
+					var User = await GetCurrentUserAsync();
+					product.UserId = User.Id;
+					_context.Add(product);
+					await _context.SaveChangesAsync();
+					return RedirectToAction("Details", new { id = product.ProductId });
+				}
+				ViewData["ProductTypeId"] = new SelectList(_context.ProductType, "ProductTypeId", "Label", product.ProductTypeId);
+			}
+			catch
+			{
+				//Log the error (uncomment ex variable name and write a log.
+				ModelState.AddModelError("", "Unable to save changes. " + "Try again, and if the problem persists " + "see your system administrator.");
+			}
             return View(product);
         }
 
