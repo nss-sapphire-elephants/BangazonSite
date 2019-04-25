@@ -1,0 +1,41 @@
+﻿@model IEnumerable<Bangazon.Models.Order>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Orders</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Card Number
+            </th>
+            <th>
+                Card Type
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.PaymentType.AccountNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PaymentType.Description)
+            </td>
+            <td>
+                <button>
+                    <a asp-action="Edit" asp-route-id="@item.OrderId">Complete my order | Change payment</a>
+                </button>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
