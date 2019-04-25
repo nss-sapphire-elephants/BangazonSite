@@ -50,7 +50,18 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                             </li>
-                        </ul>
+                        
+                        @*product search bar*@
+                       @if (User.Identity.IsAuthenticated)
+                       {
+                        <li class="nav-item">
+                            <form asp-controller="Products" asp-action="SearchResults" method="get">
+                                <input type="text" name="SearchString">
+                                    <input type="submit" value="Search Products" />                              
+                            </form>
+                        </li>
+                       }
+                    </ul>
                 </div>
             </div>
         </nav>
